@@ -13,7 +13,7 @@
  - password tidak boleh kosong (easy)
  - email dan password harus ada di database (hard)
 
-2. Register Form
+2. Register Form 
   
  TextField : 
  - userId : false
@@ -22,14 +22,17 @@
    => format email & check exist (hard)
  - userName
    => length between 5 - 30 (easy)
- - userConfirmPass
-   => equals Pass (easy)
+
+ Spinner :
+ - Input age : 
+ => Init value 12, max 99 (easy)
 
  PasswordField :
   - userPass
    => length between 5 - 20 (easy)
    => cannot be same with username (easy)
-
+ - userConfirmPass
+   => equals Pass (easy)
  
  JRadioButton : 
  - userGender
