@@ -1,12 +1,12 @@
+package Page;
 
 import java.sql.ResultSet;
 
+import Controller.MyScene;
 import Database.Connect;
 import Model.User;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -14,130 +14,29 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class Main extends Application {
-
-	Scene scene;
-	Stage stage;
-	Image icon;
-
-	public BorderPane makeLoginBorder() {
-//		Initiate
-		BorderPane borderPane = new BorderPane();
-
-		GridPane gridPane = new GridPane();
-		GridPane gridPaneBottom = new GridPane();
-		BorderPane borderPaneMiddle = new BorderPane();
-
-		Label emailLbl = new Label("Email");
-		Label passwordLbl = new Label("Password");
-
-		TextField emailTF = new TextField();
-
-		PasswordField passwordPF = new PasswordField();
-
-		Button loginBtn = new Button("Login");
-		Button registerBtn = new Button("Register");
-
-//		Arrange Component
-		borderPane.setCenter(borderPaneMiddle);
-		borderPane.setBottom(gridPaneBottom);
-
-		gridPaneBottom.add(loginBtn, 0, 1);
-		gridPaneBottom.add(registerBtn, 1, 1);
-
-		gridPane.add(emailLbl, 0, 0);
-		gridPane.add(passwordLbl, 0, 1);
-
-		gridPane.add(emailTF, 1, 0);
-		gridPane.add(passwordPF, 1, 1);
-
-		borderPaneMiddle.setCenter(gridPane);
-
-//		Positioning
-		borderPane.setAlignment(gridPaneBottom, Pos.CENTER);
-		borderPane.setAlignment(borderPaneMiddle, Pos.CENTER);
-
-		borderPane.setPadding(new Insets(10));
-
-		gridPane.setAlignment(Pos.CENTER_LEFT);
-		gridPane.setVgap(10);
-
-		gridPaneBottom.setAlignment(Pos.CENTER);
-		gridPaneBottom.setHgap(10);
-		gridPaneBottom.setPadding(new Insets(0, 0, 3, 0));
-
-		emailTF.setMaxWidth(320);
-		passwordLbl.setMaxWidth(320);
-
-		emailLbl.setMinWidth(100);
-		passwordLbl.setMinWidth(100);
-
-//		Button listener
-		loginBtn.setOnMouseClicked(event -> {
-			
-			String inpEmail = emailTF.getText();
-			String inpPassword = passwordPF.getText();
-			
-			String error = validateLogin(inpEmail, inpPassword);
-			
-			if (error != null) {
-				Label errorLbl = new Label(error);
-				errorLbl.setTextFill(Color.RED);
-				borderPaneMiddle.setBottom(errorLbl);
-				borderPaneMiddle.setAlignment(errorLbl, Pos.CENTER);
-				borderPaneMiddle.setPadding(new Insets(0, 0, 5, 0));
-			} else {
-				System.out.println("Success login!");
-			}
-		});
-
-		registerBtn.setOnMouseClicked(event -> {
-			registerPage();
-		});
-
-		return borderPane;
+public class Register {
+	
+	private static Register registerPage;
+	
+	public static Register getInstance()
+	{
+		if(registerPage == null)
+		{
+			registerPage = new Register();
+		}
+		return registerPage;
 	}
 	
-	public String validateLogin(String email, String password)
+	
+	public void registerPage()
 	{
-		if(email.isEmpty() || password.isEmpty())
-		{
-			return "Fields cannot be empty !";
-		}
-		
-		if(checkLogin(email, password) == false)
-		{
-			return "User not found";
-		}
-		
-		return null;
+		MyScene.changeScene(makeRegisterBorder(), "Register", 330, 400);
 	}
-
-	public static void main(String[] args) {
-		launch(args);
-
-	}
-
-	private void setImage() {
-		icon = new Image(getClass().getResourceAsStream("logo.png"));
-	}
-
-	public void loginPage() {
-		int width = 300;
-		int height = 150;
-
-		stage.setTitle("Login");
-		scene = new Scene(makeLoginBorder(), width, height);
-		stage.setScene(scene);
-	}
-
+	
 	public BorderPane makeRegisterBorder() {
 		BorderPane borderPane = new BorderPane();
 //		Initiate
@@ -248,7 +147,8 @@ public class Main extends Application {
 			if (error == null) {
 				User user = new User(generateId(), inpEmail, inpName, inpPassword, gender, inpAge, "user");
 				user.save();
-				loginPage();
+				Login login = Login.getInstance();
+				login.loginPage();
 			} else {
 				Label errorLbl = new Label(error);
 				errorLbl.setTextFill(Color.RED);
@@ -260,6 +160,29 @@ public class Main extends Application {
 		});
 		return borderPane;
 	}
+	
+	public int generateId() {
+		int id = 1;
+		try {
+			Connect connect = Connect.getConnection();
+			String query = "SELECT * FROM user";
+			ResultSet rs = connect.executeQuery(query);
+
+			while (rs.next()) {
+				if(rs.isLast())
+				{					
+					int lastId = rs.getInt("userId");
+					id = lastId + 1;
+				}else {
+					continue;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 
 	public String validateRegister(String email, String name, String password, String confirmPassword, String gender) {
 
@@ -283,18 +206,14 @@ public class Main extends Application {
 			return "Gender cannot be empty";
 		}
 		return null;
-
 	}
-
 	public boolean checkEmailExists(String e) {
 		Connect connect = Connect.getConnection();
 		String query = "SELECT * FROM user";
 		ResultSet rs = connect.executeQuery(query);
 		try {
 			while (rs.next()) {
-//				System.out.println("Email in db :" + rs.getString("userEmail"));
 				if (rs.getString("userEmail").equals(e)) {
-//					System.out.println("Masuk");
 					return true;
 				}
 			}
@@ -304,85 +223,5 @@ public class Main extends Application {
 
 		return false;
 	}
-
-	public int generateId() {
-		int id = 1;
-		try {
-			Connect connect = Connect.getConnection();
-			String query = "SELECT * FROM user";
-			ResultSet rs = connect.executeQuery(query);
-
-			while (rs.next()) {
-				if(rs.isLast())
-				{					
-					int lastId = rs.getInt("userId");
-					id = lastId + 1;
-				}else {
-					continue;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return id;
-	}
-
-	public int getTotalUser() {
-		int totalUser = 0;
-		try {
-			Connect con = Connect.getConnection();
-			String query = "SELECT * FROM user";
-			ResultSet rs = con.executeQuery(query);
-			while (rs.next()) {
-				totalUser += 1;
-			}
-
-		} catch (Exception e) {
-		}
-		return totalUser;
-	}
-
-	public boolean checkLogin(String inpEmail, String inpPassword) {
-		Connect connect = Connect.getConnection();
-		String query = "SELECT * FROM user";
-		ResultSet rs = connect.executeQuery(query);
-
-		try {
-			while (rs.next()) {
-				String email = rs.getString("userEmail");
-				String password = rs.getString("userPassword");
-				if (inpEmail.equals(email) && inpPassword.equals(password)) {
-					return true;
-				}
-
-			}
-		} catch (Exception e) {
-		}
-		return false;
-	}
-
-	public void registerPage() {
-		int width = 330;
-		int height = 400;
-		stage.setTitle("Register");
-		scene = new Scene(makeRegisterBorder(), width, height);
-		stage.setScene(scene);
-	}
-
-	@Override
-	public void start(Stage arg0) throws Exception {
-		setMainStage(arg0);
-
-		setImage();
-		loginPage();
-
-		stage.getIcons().add(icon);
-		stage.setResizable(false);
-		stage.show();
-	}
-
-	public void setMainStage(Stage arg) {
-		stage = arg;
-	}
-
+	
 }

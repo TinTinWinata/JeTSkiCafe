@@ -12,6 +12,18 @@ public class User {
 	private Integer userAge;
 	private String userRole;
 	
+	private static User activeUser;
+
+	public static void setActiveUser(User u)
+	{
+		activeUser = u;
+	}
+	
+	public static User getActiveUser()
+	{
+		return activeUser;
+	}
+	
 	public User(Integer userId, String userEmail, String userName, String userPassword, String userGender,
 			Integer userAge, String userRole) {
 		super();

@@ -31,6 +31,7 @@
   - userPass
    => length between 5 - 20 (easy)
    => cannot be same with username (easy)
+
  - userConfirmPass
    => equals Pass (easy)
  
