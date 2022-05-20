@@ -1,5 +1,8 @@
 package Page;
 
+import java.sql.ResultSet;
+
+import Database.Connect;
 import Helper.Utillities;
 import Model.Cart;
 import Model.Menu;
@@ -84,6 +87,27 @@ public class OrderPage {
 		removeCartBtn.setMinWidth(400); 
 		orderBtn.setMinWidth(400); 
 		quantitySpinner.setMinWidth(400);
+	}
+	
+	public void addTableData()
+	{
+		Connect c = Connect.getConnection();
+		String query = "SELECT * FROM menu";
+		ResultSet rs = c.executeQuery(query);
+		try {
+			while(rs.next())
+			{
+				 int menuId = rs.getInt("menuId");
+				 String menuName = rs.getString("menuName");
+				 String menuType = rs.getString("menuType");
+				 int menuPrice = rs.getInt("menuPrice");
+				 int menuStock = rs.getInt("menuStock");
+				 Menu m = new Menu(menuId, menuName, menuType, menuPrice, menuStock);
+				 table.getItems().add(m);				 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setTable()
