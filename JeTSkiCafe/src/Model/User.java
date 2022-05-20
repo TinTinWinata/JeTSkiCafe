@@ -14,6 +14,7 @@ public class User {
 	
 	private static User activeUser;
 
+	
 	public static void setActiveUser(User u)
 	{
 		activeUser = u;
@@ -42,7 +43,6 @@ public class User {
 		try {
 		String query = String.format("INSERT INTO user VALUES ('%d','%s','%s','%s','%s',%d,'%s')"
 				,userId, userEmail, userName, userPassword, userGender, userAge, userRole);
-		System.out.println("Query : " + query);
 		connect.executeUpdate(query);
 		} catch (Exception e) {
 			e.printStackTrace();

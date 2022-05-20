@@ -8,3 +8,4 @@ public class MOTA{
 		Application.launch(Staging.class);
 	}
 }
+

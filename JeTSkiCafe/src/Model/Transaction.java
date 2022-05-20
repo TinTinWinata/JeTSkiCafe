@@ -1,22 +1,29 @@
 package Model;
 
+import java.util.Vector;
+
 public class Transaction {
 
-	private Integer transcationId;
+	private Integer transactionId;
 	private Integer userId;
 	private String transactionDate;
+	private Integer totalPrice;
+	private Vector<DetailTransaction> transactionList = new Vector<>();
 	
-	public Transaction(Integer transcationId, Integer userId, String transactionDate) {
+	public Transaction(Integer transactionId, Integer userId, String transactionDate) {
 		super();
-		this.transcationId = transcationId;
+		this.transactionId = transactionId;
 		this.userId = userId;
 		this.transactionDate = transactionDate;
 	}
-	public Integer getTranscationId() {
-		return transcationId;
+	
+	
+	
+	public Integer getTransactionId() {
+		return transactionId;
 	}
-	public void setTranscationId(Integer transcationId) {
-		this.transcationId = transcationId;
+	public void setTranscationId(Integer transactionId) {
+		this.transactionId = transactionId;
 	}
 	public Integer getUserId() {
 		return userId;

@@ -18,15 +18,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class Register {
+public class RegisterPage {
 	
-	private static Register registerPage;
+	private static RegisterPage registerPage;
 	
-	public static Register getInstance()
+	public static RegisterPage getInstance()
 	{
 		if(registerPage == null)
 		{
-			registerPage = new Register();
+			registerPage = new RegisterPage();
 		}
 		return registerPage;
 	}
@@ -147,7 +147,7 @@ public class Register {
 			if (error == null) {
 				User user = new User(generateId(), inpEmail, inpName, inpPassword, gender, inpAge, "user");
 				user.save();
-				Login login = Login.getInstance();
+				LoginPage login = LoginPage.getInstance();
 				login.loginPage();
 			} else {
 				Label errorLbl = new Label(error);

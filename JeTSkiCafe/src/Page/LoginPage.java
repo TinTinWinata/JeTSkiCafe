@@ -16,15 +16,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
-public class Login {
+public class LoginPage {
 	
-	private static Login loginPage;
+	private static LoginPage loginPage;
 	
-	public static Login getInstance()
+	public static LoginPage getInstance()
 	{
 		if(loginPage == null)
 		{
-			loginPage = new Login();
+			loginPage = new LoginPage();
 		}
 		return loginPage;
 	}
@@ -102,12 +102,14 @@ public class Login {
 				borderPaneMiddle.setPadding(new Insets(0, 0, 5, 0));
 			} else {
 				AlertWindow alertWindow = new AlertWindow(AlertType.INFORMATION, "Information", "Sucess Login!");
-				System.out.println("Success login!");
+				System.out.println("Success Login!");
+				MenuPage menuPage = MenuPage.getInstance();
+				menuPage.menuPage();
 			}
 		});
 
 		registerBtn.setOnMouseClicked(event -> {
-			Register register = Register.getInstance();
+			RegisterPage register = RegisterPage.getInstance();
 			register.registerPage();
 		});
 

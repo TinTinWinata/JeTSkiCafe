@@ -1,7 +1,7 @@
 package Main;
 
 import Controller.MyStage;
-import Page.Login;
+import Page.LoginPage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,7 +15,7 @@ public class Main extends Application {
 		
 		myStage.setIcon("logo.png");
 		
-		Login login = Login.getInstance();
+		LoginPage login = LoginPage.getInstance();
 		login.loginPage();
 		
 		myStage.showStage();
