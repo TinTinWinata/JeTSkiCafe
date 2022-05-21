@@ -1,11 +1,14 @@
 package Page;
 
 import java.sql.ResultSet;
+import java.util.Vector;
 
 import Database.Connect;
 import Helper.Utillities;
 import Model.Transaction;
+import Model.TransactionDetail;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -20,9 +23,11 @@ public class TransactionPage {
 	private static TransactionPage transactionPage;
 	
 	private BorderPane mainBorderPane;
+	private GridPane menuGridPane;
 	private GridPane bottomGridPane;
 	
 	private TableView<Transaction> table;
+	private TableView<TransactionDetail> tableTd;
 	
 	private Label menuNameLbl;
 	private Label menuTypeLbl;
@@ -33,6 +38,8 @@ public class TransactionPage {
 	private TextField menuTypeTF;
 	private TextField menuPriceTF;
 	private TextField quantityTF;
+	
+	private Button removeBtn;
 	
 	public static TransactionPage getInstance()
 	{
@@ -55,8 +62,19 @@ public class TransactionPage {
 		menuPriceTF = new TextField();
 		quantityTF = new TextField();
 		
+		menuNameTF.setDisable(true);
+		menuTypeTF.setDisable(true);
+		menuPriceTF.setDisable(true);
+		quantityTF.setDisable(true);
+		
+		menuGridPane = new GridPane();
 		bottomGridPane = new GridPane();
+		
+		removeBtn = new Button("Remove Transaction");
+		
 		table = new TableView<Transaction>();
+		tableTd = new TableView<TransactionDetail>();
+		
 		mainBorderPane = new BorderPane();
 	}
 	
@@ -66,15 +84,26 @@ public class TransactionPage {
 		TableColumn<Transaction, String> transactionDate = new TableColumn<Transaction, String>("Date");
 		TableColumn<Transaction, String> transactionPrice = new TableColumn<Transaction, String>("Price");
 		
-		transactionId.setCellValueFactory(new PropertyValueFactory<Transaction, String>("id"));
-		transactionDate.setCellValueFactory(new PropertyValueFactory<Transaction, String>("date"));
-		transactionPrice.setCellValueFactory(new PropertyValueFactory<Transaction, String>("price"));
+		transactionId.setCellValueFactory(new PropertyValueFactory<Transaction, String>("transactionId"));
+		transactionDate.setCellValueFactory(new PropertyValueFactory<Transaction, String>("transactionDate"));
+		transactionPrice.setCellValueFactory(new PropertyValueFactory<Transaction, String>("transactionPrice"));
 		
 		transactionId.setMinWidth(Utillities.WIDTH / 3);
 		transactionDate.setMinWidth(Utillities.WIDTH / 3);
 		transactionPrice.setMinWidth(Utillities.WIDTH / 3);
 		
-		table.getColumns().addAll(transactionId, transactionDate, transactionPrice);	
+		table.getColumns().addAll(transactionId, transactionDate, transactionPrice);
+		
+		
+		TableColumn<TransactionDetail, String> transcationDetailId = new TableColumn<TransactionDetail, String>("Transaction Detail ID");
+		TableColumn<TransactionDetail, String> menuId = new TableColumn<TransactionDetail, String>("Menu Id");
+		TableColumn<TransactionDetail, String> quantity = new TableColumn<TransactionDetail, String>("Quantity");
+		
+		transcationDetailId.setCellValueFactory(new PropertyValueFactory<TransactionDetail, String>("transactionDetailId"));
+		menuId.setCellValueFactory(new PropertyValueFactory<TransactionDetail, String>("menuId"));
+		quantity.setCellValueFactory(new PropertyValueFactory<TransactionDetail, String>("quantity"));
+		
+		tableTd.getColumns().addAll(transcationDetailId, menuId, quantity);
 	}
 	
 	public void addTableData()
@@ -82,31 +111,46 @@ public class TransactionPage {
 		Connect c = Connect.getConnection();
 		String query = "SELECT * FROM transaction";
 		ResultSet rs = c.executeQuery(query);
+		table.getItems().clear();
+		
+		Vector<Transaction> transactionList = new Vector<>();
+		
 		try {
 			while(rs.next())
 			{
-				int transactionId = rs.getInt("transactionid");
+				int transactionId = rs.getInt("transactionId");
 				int userId = rs.getInt("userId");
 				String transactionDate = rs.getString("transactionDate");
 				Transaction t = new Transaction(transactionId, userId, transactionDate);
-				table.getItems().add(t);
+				transactionList.add(t);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		for (Transaction t : transactionList) {
+			t.countPrice();
+			t.setTransactionDetail();
+			table.getItems().add(t);
 		}
 	}
 	
 	public void setComponent()
 	{
-		bottomGridPane.add(menuNameLbl, 0, 0);
-		bottomGridPane.add(menuTypeLbl, 0, 1);
-		bottomGridPane.add(menuPriceLbl, 2, 0);
-		bottomGridPane.add(quantityLbl, 2, 1);
+		menuGridPane.add(menuNameLbl, 0, 0);
+		menuGridPane.add(menuTypeLbl, 0, 1);
+		menuGridPane.add(menuPriceLbl, 2, 0);
+		menuGridPane.add(quantityLbl, 2, 1);
 		
-		bottomGridPane.add(menuNameTF, 1, 0);
-		bottomGridPane.add(menuPriceTF, 1, 1);
-		bottomGridPane.add(menuTypeTF, 3, 0);
-		bottomGridPane.add(quantityTF, 3, 1);
+		menuGridPane.add(menuNameTF, 1, 0);
+		menuGridPane.add(menuPriceTF, 1, 1);
+		menuGridPane.add(menuTypeTF, 3, 0);
+		menuGridPane.add(quantityTF, 3, 1);
+		
+		menuGridPane.add(removeBtn, 0, 2);
+		
+		bottomGridPane.add(menuGridPane, 0, 0);
+		bottomGridPane.add(tableTd, 1, 0);
 	}
 	
 	public void arrangeComponent()
@@ -117,9 +161,52 @@ public class TransactionPage {
 	
 	public void positioningComponent()
 	{
-		bottomGridPane.setHgap(10);
-		bottomGridPane.setVgap(10);
-		bottomGridPane.setPadding(new Insets(10, 10, 10, 10));
+		menuGridPane.setHgap(10);
+		menuGridPane.setVgap(10);
+		menuGridPane.setPadding(new Insets(10, 10, 10, 10));
+	}
+	
+	public void setEvent()
+	{
+		table.setOnMouseClicked(x -> {
+			Transaction selectedT = table.getSelectionModel().getSelectedItem();
+			tableTd.getItems().clear();
+			
+			if(selectedT == null)
+			{
+				return;
+			}
+			
+			for (TransactionDetail td : selectedT.getTdList()) {
+				System.out.println("Transaction detail : " + td.getTransactionDetailId());
+				td.setMenu();
+				tableTd.getItems().add(td);
+			}
+		});
+		tableTd.setOnMouseClicked(x -> {
+			TransactionDetail selectedTd = tableTd.getSelectionModel().getSelectedItem();
+			
+			if(selectedTd == null)
+			{
+				return;
+			}
+			menuNameTF.setText(selectedTd.getMenu().getMenuName());
+			menuTypeTF.setText(selectedTd.getMenu().getMenuType());
+			menuPriceTF.setText(String.valueOf(selectedTd.getMenu().getMenuPrice()));
+			quantityTF.setText(String.valueOf(selectedTd.getQuantity()));
+		});
+		removeBtn.setOnMouseClicked(x -> {
+			tableTd.getItems().clear();
+			Transaction selectedT = table.getSelectionModel().getSelectedItem();
+			
+			if(selectedT == null)
+			{
+				return;
+			}
+			
+			selectedT.remove();
+			addTableData();
+		});
 	}
 	
 	public BorderPane makeTransactionPage()
@@ -129,6 +216,8 @@ public class TransactionPage {
 		arrangeComponent();
 		positioningComponent();
 		setTable();
+		addTableData();
+		setEvent();
 		return mainBorderPane;
 	}
 	

@@ -45,7 +45,7 @@ public class MenuPage {
 		profile = new MenuItem("Profile");
 		logoff = new MenuItem("Logoff");
 		exit = new MenuItem("Exit");
-		order = new MenuItem("Order Menu");
+		order = new MenuItem("Order Menu");	
 		transaction = new MenuItem("Transaction");
 		
 		mainPane = new BorderPane();
@@ -141,7 +141,6 @@ public class MenuPage {
 	{
 		adminInit();
 		adminComponent();
-		setEvent();
 		MyScene.changeScene(mainPane, "JetSki Cafe", Utillities.WIDTH, Utillities.HEIGHT);
 	}
 	

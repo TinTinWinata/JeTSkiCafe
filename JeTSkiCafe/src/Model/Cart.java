@@ -1,5 +1,7 @@
 package Model;
 
+import Database.Connect;
+
 public class Cart {
 
 	private Integer userId;
@@ -30,7 +32,20 @@ public class Cart {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
+	
+	public void save()
+	{
+		Connect con = Connect.getConnection();
+		String query = String.format("INSERT INTO cart VALUES (%d, %d,%d)", userId, menuId, quantity);
+		con.executeUpdate(query);
+	}
+	
+	public void remove()
+	{
+		Connect c = Connect.getConnection();
+		String query = String.format("DELETE FROM cart WHERE userId = %d AND menuId = %d", userId, menuId);
+		c.executeUpdate(query);
+	}
 	
 	
 }
