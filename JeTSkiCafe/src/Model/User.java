@@ -1,6 +1,11 @@
 package Model;
 
+import java.sql.ResultSet;
+import java.util.Vector;
+
 import Database.Connect;
+import Page.AlertWindow;
+import javafx.scene.control.Alert.AlertType;
 
 public class User {
 
@@ -48,6 +53,47 @@ public class User {
 			e.printStackTrace();
 			System.exit(0);
 		}
+	}
+	
+	public void remove()
+	{
+		Connect c = Connect.getConnection();
+		String query = String.format("DELETE FROM user WHERE userId = %d", this.userId);
+		c.executeUpdate(query);
+	}
+	
+	public void update(String userEmail, String userName, String userPassword, String userGender,int userAge, String userRole)
+	{
+		Connect c = Connect.getConnection();
+		String query = String.format("UPDATE user SET userEmail = '%s', userName = '%s', userPassword = '%s', userGender = '%s', userAge = %d, userRole = '%s' WHERE userId = %d",
+				userEmail, userName, userPassword, userGender, userAge, userRole, this.userId);
+		c.executeUpdate(query);
+	}
+	
+	public static Vector<User> getUserFromDB()
+	{
+		Vector<User> userList = new Vector<>();
+		Connect c = Connect.getConnection();
+		String query = "SELECT * FROM user";
+		ResultSet rs = c.executeQuery(query);
+		try {
+			while(rs.next())
+			{
+				int userId = rs.getInt("userId");
+				String userEmail = rs.getString("userEmail");
+				String userName = rs.getString("userName");
+				String userPassword = rs.getString("userPassword");
+				String userGender = rs.getString("userGender");
+				int userAge = rs.getInt("userAge");
+				String userRole = rs.getString("userRole");
+				
+				User u = new User(userId, userEmail, userName, userPassword, userGender, userAge, userRole);
+				userList.add(u);
+			}
+		} catch (Exception e) {
+			new AlertWindow(AlertType.ERROR, "Failed take user data from DB");
+		}
+		return userList;
 	}
 	
 	public Integer getUserId() {

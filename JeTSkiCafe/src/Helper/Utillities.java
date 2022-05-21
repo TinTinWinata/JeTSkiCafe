@@ -24,5 +24,16 @@ public class Utillities {
 		return formatter.format(date);
 	}
 	
+	public boolean isDigit(String s) {
+		int len = s.length();
+		for(int i=0;i<len;i++)
+		{
+			if(!Character.isDigit(s.charAt(i)))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	
 }

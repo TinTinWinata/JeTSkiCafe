@@ -113,12 +113,11 @@
    - menuPrice :
      => must numeric (easy)
      => more than 0 (easy)
-   
- - JSpinner : 
-   - menuStock
-     => must more than 0 (easy)
+   - menuStock : 
+     => must numeric (easy)
+     => more than 0 (easy)
 
- - JComboBOx : 
+ - JComboBox : 
    - menuType
      => must choosed (easy)
 

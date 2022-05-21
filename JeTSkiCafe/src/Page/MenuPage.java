@@ -127,7 +127,14 @@ public class MenuPage {
 	
 	public void adminEvent()
 	{
-		
+		menu.setOnAction(x -> {
+			ManageMenuPage manageMenuPage = ManageMenuPage.getInstance();
+			mainPane.setCenter(manageMenuPage.makeManageMenuPage());
+		});
+		user.setOnAction(x -> {
+			ManageUserPage manageUserPage = ManageUserPage.getInstance();
+			mainPane.setCenter(manageUserPage.makeManageUserPage());
+		});
 	}
 	
 	public void makeUserPage()
@@ -143,6 +150,7 @@ public class MenuPage {
 		
 		adminInit();
 		adminComponent();
+		adminEvent();
 		MyScene.changeScene(mainPane, "JetSki Cafe", Utillities.WIDTH, Utillities.HEIGHT);
 	}
 	

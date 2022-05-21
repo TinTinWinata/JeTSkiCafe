@@ -1,5 +1,12 @@
 package Model;
 
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import Database.Connect;
+import Page.AlertWindow;
+import javafx.scene.control.Alert.AlertType;
+
 public class Menu {
 
 	private Integer menuId;
@@ -48,6 +55,50 @@ public class Menu {
 		this.menuStock = menuStock;
 	}
 	
+	public void update(String menuName, String menuType, int menuPrice, int menuStock)
+	{
+		Connect c = Connect.getConnection();
+		String q = String.format("UPDATE menu SET menuName = '%s', menuType = '%s', menuPrice = %d, menuStock = %d WHERE menuId = %d", 
+				menuName, menuType, menuPrice, menuStock, this.menuId);
+		c.executeUpdate(q);
+	}
 	
+	public void remove()
+	{
+		Connect c = Connect.getConnection();
+		String q = String.format("DELETE FROM menu WHERE menuId = %s", menuId);
+		c.executeUpdate(q);
+	}
+	
+	public void save()
+	{
+		Connect c = Connect.getConnection();
+		String q = String.format("INSERT INTO menu VALUES (%d, '%s', '%s', %d, %d)", menuId, menuName, menuType, menuPrice, menuStock);
+		c.executeUpdate(q);
+	}
+	
+	public static Vector<Menu> getMenuFromDB()
+	{	
+		Vector<Menu> menuList = new Vector<Menu>();
+		Connect c = Connect.getConnection();
+		String q = "SELECT * FROM menu";
+		ResultSet rs = c.executeQuery(q);
+		try {
+			while(rs.next())
+			{
+				int menuId = rs.getInt("menuId");
+				String menuName = rs.getString("menuName");
+				String menuType = rs.getString("menuType");
+				int menuPrice = rs.getInt("menuPrice");
+				int menuStock = rs.getInt("menuStock");
+				
+				Menu m = new Menu(menuId, menuName, menuType, menuPrice, menuStock);
+				menuList.add(m);
+			}
+		} catch (Exception e) {
+			new AlertWindow(AlertType.ERROR, "Failed to get menu from Database");
+		}
+		return menuList;
+	}
 	
 }
