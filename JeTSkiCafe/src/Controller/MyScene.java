@@ -14,4 +14,13 @@ public class MyScene {
 		scene = new Scene(parent, width, height);
 		stage.setScene(scene);
 	}
+	
+	public static void changeScene(Parent parent,int width, int height)
+	{
+		MyStage stage = MyStage.getInstance();
+		stage.setTitle("JeTSki Cafe");
+		
+		scene = new Scene(parent, width, height);
+		stage.setScene(scene);
+	}
 }

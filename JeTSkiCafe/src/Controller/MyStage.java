@@ -30,7 +30,7 @@ public class MyStage {
 	
 	public void setScene(Scene scene)
 	{
-		this.stage.setScene(scene);
+			this.stage.setScene(scene);
 	}
 
 	

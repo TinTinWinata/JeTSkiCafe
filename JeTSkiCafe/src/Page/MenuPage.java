@@ -22,6 +22,7 @@ public class MenuPage {
 	private Menu userMenu;
 	private Menu transactionMenu;
 	private Menu manageMenu;
+	private Menu adminMenu;
 	
 	private MenuItem profile;
 	private MenuItem logoff;
@@ -83,21 +84,21 @@ public class MenuPage {
 		mainPane = new BorderPane();
 		menuBar = new MenuBar();
 		
-		userMenu = new Menu("User");
+		adminMenu = new Menu("Admin");
 		manageMenu = new Menu("Manage");
 	}
 	
 	public void adminComponent()
 	{
-		userMenu.getItems().add(profile);
-		userMenu.getItems().add(logoff);
-		userMenu.getItems().add(exit);
+		adminMenu.getItems().add(profile);
+		adminMenu.getItems().add(logoff);
+		adminMenu.getItems().add(exit);
 		
 		manageMenu.getItems().add(menu);
 		manageMenu.getItems().add(user);
 		
-		menuBar.getMenus().add(userMenu);
-		menuBar.getMenus().add(transactionMenu);
+		menuBar.getMenus().add(adminMenu);
+		menuBar.getMenus().add(manageMenu);
 		
 		mainPane.setTop(menuBar);
 	}
@@ -139,6 +140,7 @@ public class MenuPage {
 	
 	public void makeAdminPage()
 	{
+		
 		adminInit();
 		adminComponent();
 		MyScene.changeScene(mainPane, "JetSki Cafe", Utillities.WIDTH, Utillities.HEIGHT);
