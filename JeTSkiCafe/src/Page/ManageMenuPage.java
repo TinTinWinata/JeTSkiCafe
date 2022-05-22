@@ -221,7 +221,11 @@ public class ManageMenuPage {
 	
 	public boolean dataValidation(Menu m)
 	{
-		if(m.getMenuName().length() < 5 | m.getMenuName().length() > 25)
+		if(m.getMenuName().isEmpty() || m.getMenuPrice() == null || m.getMenuStock() == null
+				|| m.getMenuType().isEmpty() || m.getMenuId() == null){
+			new AlertWindow(AlertType.ERROR, "There's can't be a empty field!");
+			return false;
+		}else if(m.getMenuName().length() < 5 | m.getMenuName().length() > 25)
 		{
 			new AlertWindow(AlertType.ERROR, "Name length must be 5 - 20 (inclusively)");
 			return false;

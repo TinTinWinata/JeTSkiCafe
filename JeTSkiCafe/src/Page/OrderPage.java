@@ -60,7 +60,7 @@ public class OrderPage {
 		addToCartBtn = new Button("Add to cart");
 		removeCartBtn = new Button("Remove cart");
 		orderBtn = new Button("Order");
-		quantitySpinner = new Spinner<Integer>(1, 10, 1);
+		quantitySpinner = new Spinner<Integer>(1, 99, 1);
 	}
 
 	public void arrangeComponent() {
@@ -176,21 +176,25 @@ public class OrderPage {
 		}
 		return false;
 	}
-
-	public void setEvent() {
+	
+	
+	
+	public void setEvent() {		
 		addToCartBtn.setOnMouseClicked(x -> {
 			Menu selectedMenu = table.getSelectionModel().getSelectedItem();
 			if (selectedMenu == null) {
-				new AlertWindow(AlertType.ERROR, "Please select the menu");
+				new AlertWindow(AlertType.ERROR, "Please select at least 1 menu");
 			} else if (isCartExists(selectedMenu)) {
 				new AlertWindow(AlertType.ERROR, "Menu already in the cart");
-			} else {
+			} else if(quantitySpinner.getValue() > selectedMenu.getMenuStock()){
+				new AlertWindow(AlertType.ERROR, "Quantity can't exceed the stock");
+			}else{
 				int quantity = quantitySpinner.getValue();
 				Cart newCart = new Cart(User.getActiveUser().getUserId(), selectedMenu.getMenuId(), quantity);
 				newCart.save();
 				addCartTable();
 			}
-		});
+		}); 
 		removeCartBtn.setOnMouseClicked(x -> {
 			Cart selectedCart = cartTable.getSelectionModel().getSelectedItem();
 			if (selectedCart == null) {

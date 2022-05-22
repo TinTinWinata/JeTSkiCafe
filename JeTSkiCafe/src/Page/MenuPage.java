@@ -24,7 +24,6 @@ public class MenuPage {
 	private Menu manageMenu;
 	private Menu adminMenu;
 	
-	private MenuItem profile;
 	private MenuItem logoff;
 	private MenuItem exit;
 	private MenuItem order;
@@ -43,7 +42,6 @@ public class MenuPage {
 	
 	public void userInit()
 	{
-		profile = new MenuItem("Profile");
 		logoff = new MenuItem("Logoff");
 		exit = new MenuItem("Exit");
 		order = new MenuItem("Order Menu");	
@@ -59,7 +57,6 @@ public class MenuPage {
 	
 	public void userComponent()
 	{
-		userMenu.getItems().add(profile);
 		userMenu.getItems().add(logoff);
 		userMenu.getItems().add(exit);
 		
@@ -74,7 +71,6 @@ public class MenuPage {
 	
 	public void adminInit()
 	{
-		profile = new MenuItem("Profile");
 		logoff = new MenuItem("Logoff");
 		exit = new MenuItem("Exit");
 		
@@ -90,7 +86,6 @@ public class MenuPage {
 	
 	public void adminComponent()
 	{
-		adminMenu.getItems().add(profile);
 		adminMenu.getItems().add(logoff);
 		adminMenu.getItems().add(exit);
 		

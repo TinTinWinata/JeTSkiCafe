@@ -284,6 +284,14 @@ public class ManageUserPage {
 
 	public boolean dataValidation(User u, String str) {
 		
+		if(u.getUserAge() == null || u.getUserEmail() == null || u.getUserGender() == null 
+				|| u.getUserId() == null || u.getUserName() == null || u.getUserPassword() == null
+				|| u.getUserRole() == null)
+		{
+			new AlertWindow(AlertType.ERROR, "There's can't be a empty field!");
+			return false;
+		}
+		
 		if(str == "insert")
 		{
 			if(util.isEmailExists(u.getUserEmail()))

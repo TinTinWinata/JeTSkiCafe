@@ -16,8 +16,6 @@
 2. Register Form 
   
  TextField : 
- - userId : false
-   => Generate ID (hard)
  - userEmail	
    => format email & check exist (hard)
  - userName
@@ -42,12 +40,13 @@
  Button : 
  - Submit
    => Insert (Role : user)
+ - userId : false
+   => Generate ID (hard)
 
 3. MainForm
  
  Menu (For User):
  - User :
-   - Profile 
    - Logoff
    - Exit
  - Transcation :	
@@ -56,7 +55,6 @@
 
  Menu (For Admin):
  - Admin :
-   - Profile 
    - Logoff
    - Exit
  - Manage :
@@ -65,7 +63,7 @@
 
  Validasi : 
  - Role User, 	 :
-   => Menu User
+   => Menu User (easy)
 
 4 Order Menu 
  - JTable :
@@ -99,7 +97,7 @@
    => header : menuName, menuType, menuPrice, quantity
 
    Validasi : 
-   - Jika menekan row header maka isi detail transaction berubah sesuai data di DB
+   - Jika menekan row header maka isi detail transaction berubah sesuai data di DB 
 
 6. Manage Menu
  - JTable :
@@ -160,10 +158,10 @@ SUMMARY
 =======
 
 Logic : 
-=> easy : 19 * 1 = 19
+=> easy : 22 * 1 = 22
 => medium : 0 * 2 = 0
 => hard : 9 * 3 = 27
-   TOTAL : 46
+   TOTAL : 49
 
 Form Extra : 
 - Manage User Form (CRUD)

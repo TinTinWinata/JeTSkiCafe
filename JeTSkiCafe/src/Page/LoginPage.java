@@ -102,7 +102,6 @@ public class LoginPage {
 				borderPaneMiddle.setPadding(new Insets(0, 0, 5, 0));
 			} else {
 				AlertWindow alertWindow = new AlertWindow(AlertType.INFORMATION, "Information", "Sucess Login!");
-				System.out.println("Success Login!");
 				MenuPage menuPage = MenuPage.getInstance();
 				menuPage.menuPage();
 			}

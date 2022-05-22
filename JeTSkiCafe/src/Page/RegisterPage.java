@@ -187,7 +187,7 @@ public class RegisterPage {
 	public String validateRegister(String email, String name, String password, String confirmPassword, String gender) {
 
 		if (email == null || name == null || password == null || confirmPassword == null || gender == null) {
-			return "Fields cannot be empty !";
+			return "There's can't be a empty field!";
 		}
 
 		if (!email.endsWith(".com")) {
