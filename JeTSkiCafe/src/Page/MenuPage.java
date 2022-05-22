@@ -135,6 +135,14 @@ public class MenuPage {
 			ManageUserPage manageUserPage = ManageUserPage.getInstance();
 			mainPane.setCenter(manageUserPage.makeManageUserPage());
 		});
+		logoff.setOnAction(x -> {
+			User.setActiveUser(null);
+			LoginPage loginPage = LoginPage.getInstance();
+			loginPage.loginPage();
+		});
+		exit.setOnAction(x -> {
+			System.exit(0);
+		});
 	}
 	
 	public void makeUserPage()

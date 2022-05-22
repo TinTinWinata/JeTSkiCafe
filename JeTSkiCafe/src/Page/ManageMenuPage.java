@@ -8,6 +8,7 @@ import Helper.Utillities;
 import Model.Menu;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -121,6 +122,8 @@ public class ManageMenuPage {
 		bottomGridPane.setVgap(10);
 		bottomGridPane.setHgap(10);
 		bottomGridPane.setPadding(new Insets(10, 10, 10, 10));
+		
+		mainPane.setAlignment(bottomGridPane, Pos.CENTER);
 		
 		insertBtn.setMinWidth(150);
 		updateBtn.setMinWidth(150);

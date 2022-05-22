@@ -190,7 +190,7 @@ public class RegisterPage {
 			return "Fields cannot be empty !";
 		}
 
-		if (!email.endsWith("@gmail.com")) {
+		if (!email.endsWith(".com")) {
 			return "Please input a validate email";
 		} else if (checkEmailExists(email)) {
 			return "Email already exists!";

@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 
 public class TransactionPage {
 
+	
 	private static TransactionPage transactionPage;
 	
 	private BorderPane mainBorderPane;
@@ -164,6 +165,7 @@ public class TransactionPage {
 		menuGridPane.setHgap(10);
 		menuGridPane.setVgap(10);
 		menuGridPane.setPadding(new Insets(10, 10, 10, 10));
+		
 	}
 	
 	public void setEvent()
@@ -178,7 +180,6 @@ public class TransactionPage {
 			}
 			
 			for (TransactionDetail td : selectedT.getTdList()) {
-				System.out.println("Transaction detail : " + td.getTransactionDetailId());
 				td.setMenu();
 				tableTd.getItems().add(td);
 			}

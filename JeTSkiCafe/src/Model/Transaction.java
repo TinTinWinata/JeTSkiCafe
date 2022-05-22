@@ -110,7 +110,6 @@ public class Transaction {
 			}
 		} catch (Exception e) {
 		}
-		System.out.println("Total Price : "+ transactionPrice);
 	}
 	
 	public Integer getTransactionId() {

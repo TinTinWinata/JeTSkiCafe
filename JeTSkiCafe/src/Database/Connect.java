@@ -1,5 +1,8 @@
 package Database;
 import java.sql.*;
+
+import Page.AlertWindow;
+import javafx.scene.control.Alert.AlertType;
 /**
 * <strong>
 * --------------------------------------------------------------- <br>
@@ -39,9 +42,7 @@ public final class Connect {
             con = DriverManager.getConnection(CONECTION, USERNAME, PASSWORD);  
             st = con.createStatement(); 
         } catch(Exception e) {
-        	e.printStackTrace();
-        	System.out.println("Failed to connect the database, the system is terminated!");
-        	System.exit(0);
+        	new AlertWindow(AlertType.ERROR, "Failed to connect the database!");
         }  
     }
     
@@ -50,11 +51,7 @@ public final class Connect {
 	* @return Connect This returns instance from Connect class
 	*/
     public static synchronized Connect getConnection() {
-		/**
-		* If the connect is null then:
-		*   - Create the instance from Connect class
-		*   - Otherwise, just assign the previous instance of this class
-		*/
+    	
 		return connect = (connect == null) ? new Connect() : connect;
     }
 

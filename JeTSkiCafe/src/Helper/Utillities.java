@@ -1,7 +1,12 @@
 package Helper;
 
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import Database.Connect;
+import Page.AlertWindow;
+import javafx.scene.control.Alert.AlertType;
 
 public class Utillities {
 
@@ -35,5 +40,23 @@ public class Utillities {
 		}
 		return true;
 	}
-	
+	public boolean isEmailExists(String str)
+	{
+		Connect connect = Connect.getConnection();
+		String query = "SELECT * FROM user";
+		ResultSet rs = connect.executeQuery(query);
+		try {
+			while(rs.next())
+			{
+				String email = rs.getString("userEmail");
+				if(email.equals(str))
+				{
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			new AlertWindow(AlertType.ERROR, "Failed to check email exists from Database");
+		}
+		return false;
+	}
 }

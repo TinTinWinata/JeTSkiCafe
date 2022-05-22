@@ -9,12 +9,16 @@ import Model.Menu;
 import Model.User;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +31,7 @@ public class ManageUserPage {
 
 	private BorderPane mainPane;
 	private GridPane bottomGridPane;
+	private GridPane rbGridPane;
 
 	private TableView<User> table;
 
@@ -34,23 +39,33 @@ public class ManageUserPage {
 	private Label userEmailLbl;
 	private Label userNameLbl;
 	private Label userPasswordLbl;
-	private Label userGenderLbl;
 	private Label userAgeLbl;
 	private Label userRoleLbl;
+	private Label maleLbl;
+	private Label femaleLbl;
+	private Label userGenderLbl;
 
+	private ToggleGroup genderTg;
+	
 	private TextField userIdTF;
 	private TextField userEmailTF;
 	private TextField userNameTF;
-	private TextField userPasswordTF;
-	private TextField userGenderTF;
+	
+	private PasswordField userPasswordPF;
+	private RadioButton maleRb;
+	private RadioButton femaleRb;
+	
 	private TextField userAgeTF;
-	private TextField userRoleTF;
 
 	private Button insertNewBtn;
 	private Button removeBtn;
 	private Button updateBtn;
 	private Button insertBtn;
 	private Button cancelBtn;
+	
+	private String[] roleList = {"user", "admin"};
+	
+	private ComboBox<String> roleCb;
 
 	public static ManageUserPage getInstance() {
 		if (manageUserPage == null) {
@@ -64,6 +79,7 @@ public class ManageUserPage {
 
 		mainPane = new BorderPane();
 		bottomGridPane = new GridPane();
+		rbGridPane = new GridPane();
 		table = new TableView<User>();
 
 		insertNewBtn = new Button("Insert new User");
@@ -78,24 +94,35 @@ public class ManageUserPage {
 		userIdTF = new TextField();
 		userEmailTF = new TextField();
 		userNameTF = new TextField();
-		userPasswordTF = new TextField();
-		userGenderTF = new TextField();
+		userPasswordPF = new PasswordField();
 		userAgeTF = new TextField();
-		userRoleTF = new TextField();
+		
+		genderTg = new ToggleGroup();
+		maleRb = new RadioButton();
+		femaleRb = new RadioButton();
 		
 		userIdTF.setDisable(true);
-
+		
+		userGenderLbl = new Label("Gender");
+		maleLbl = new Label("Male");
+		femaleLbl = new Label("Female");
 		userIdLbl = new Label("User ID");
 		userEmailLbl = new Label("User Email");
 		userNameLbl = new Label("User Name");
 		userPasswordLbl = new Label("User Password");
-		userGenderLbl = new Label("User Gender");
 		userAgeLbl = new Label("User Age");
 		userRoleLbl = new Label("User Role");
 
+		roleCb = new ComboBox<>(FXCollections.observableArrayList(roleList));
 	}
 
 	public void arrangeComponent() {
+		rbGridPane.add(maleLbl, 0, 0);
+		rbGridPane.add(maleRb, 1, 0);
+		rbGridPane.add(femaleLbl, 2, 0);
+		rbGridPane.add(femaleRb, 3, 0);
+		
+		
 		bottomGridPane.add(userIdLbl, 0, 0);
 		bottomGridPane.add(userEmailLbl, 0, 1);
 		bottomGridPane.add(userNameLbl, 0, 2);
@@ -107,10 +134,10 @@ public class ManageUserPage {
 		bottomGridPane.add(userIdTF, 1, 0);
 		bottomGridPane.add(userEmailTF, 1, 1);
 		bottomGridPane.add(userNameTF, 1, 2);
-		bottomGridPane.add(userPasswordTF, 1, 3);
-		bottomGridPane.add(userGenderTF, 3, 0);
+		bottomGridPane.add(userPasswordPF, 1, 3);
+		bottomGridPane.add(rbGridPane, 3, 0);
 		bottomGridPane.add(userAgeTF, 3, 1);
-		bottomGridPane.add(userRoleTF, 3, 2);
+		bottomGridPane.add(roleCb, 3, 2);
 		
 		bottomGridPane.add(insertNewBtn, 4, 0);
 		bottomGridPane.add(updateBtn, 4, 1);
@@ -124,10 +151,22 @@ public class ManageUserPage {
 	}
 
 	public void positioningComponent() {
+		rbGridPane.setHgap(5);
+		rbGridPane.setPadding(new Insets(4, 0,0,0));
+		
 		bottomGridPane.setVgap(10);
 		bottomGridPane.setHgap(10);
 		bottomGridPane.setPadding(new Insets(10, 10, 10, 10));
-
+		
+		mainPane.setAlignment(bottomGridPane, Pos.CENTER);
+		
+		int BUTTON_WIDTH = 100;
+		
+		cancelBtn.setMinWidth(BUTTON_WIDTH);
+		insertBtn.setMinWidth(BUTTON_WIDTH);
+		insertNewBtn.setMinWidth(BUTTON_WIDTH);
+		removeBtn.setMinWidth(BUTTON_WIDTH);
+		updateBtn.setMinWidth(BUTTON_WIDTH);
 	}
 
 	public void enableInsertButton() {
@@ -154,10 +193,18 @@ public class ManageUserPage {
 			userIdTF.setText(selectedUser.getUserId() + "");
 			userEmailTF.setText(selectedUser.getUserEmail());
 			userNameTF.setText(selectedUser.getUserName());
-			userPasswordTF.setText(selectedUser.getUserPassword());
-			userGenderTF.setText(selectedUser.getUserGender());
+			userPasswordPF.setText(selectedUser.getUserPassword());
+			
+			String gender = selectedUser.getUserGender();
+			if(gender.equals("Male"))
+			{
+				maleRb.setSelected(true);
+			}else {
+				femaleRb.setSelected(true);
+			}
+			
 			userAgeTF.setText(selectedUser.getUserAge() + "");
-			userRoleTF.setText(selectedUser.getUserRole());
+			roleCb.setValue(selectedUser.getUserRole());
 		});
 		updateBtn.setOnMouseClicked(x -> {
 			disableInsertButton();
@@ -169,13 +216,16 @@ public class ManageUserPage {
 			int userId = Integer.parseInt(userIdTF.getText());
 			String userEmail = userEmailTF.getText();
 			String userName = userNameTF.getText();
-			String userPassword = userPasswordTF.getText();
-			String userGender = userGenderTF.getText();
+			String userPassword = userPasswordPF.getText();
+			
+			String userGender = getGenderFromRb();
+
+			
 			int userAge = Integer.parseInt(userAgeTF.getText());
-			String userRole = userRoleTF.getText();
+			String userRole = roleCb.getValue();
 
 			User tempUser = new User(userId, userEmail, userName, userPassword, userGender, userAge, userRole);
-			if (dataValidation(tempUser)) {
+			if (dataValidation(tempUser, "update")) {
 				selectedUser.update(userEmail, userName, userPassword, userGender, userAge, userRole);
 				refreshPage();
 			}
@@ -201,13 +251,13 @@ public class ManageUserPage {
 			int userId = Integer.parseInt(userIdTF.getText());
 			String userEmail = userEmailTF.getText();
 			String userName = userNameTF.getText();
-			String userPassword = userPasswordTF.getText();
-			String userGender = userGenderTF.getText();
+			String userPassword = userPasswordPF.getText();
+			String userGender = getGenderFromRb();
 			int userAge = Integer.parseInt(userAgeTF.getText());
-			String userRole = userRoleTF.getText();
+			String userRole = roleCb.getValue();
 
 			User u = new User(userId, userEmail, userName, userPassword, userGender, userAge, userRole);
-			if (dataValidation(u)) {
+			if (dataValidation(u, "insert")) {
 				u.save();
 				refreshPage();
 			}
@@ -218,10 +268,60 @@ public class ManageUserPage {
 			clearTextField();
 		});
 	}
+	
+	public String getGenderFromRb()
+	{
+		String g = null;
+		if(maleRb.isSelected())
+		{
+			g = "Male";
+		}else if(femaleRb.isSelected())
+		{
+			g = "Female";
+		}
+		return g;
+	}
 
-	public boolean dataValidation(User u) {
+	public boolean dataValidation(User u, String str) {
+		
+		if(str == "insert")
+		{
+			if(util.isEmailExists(u.getUserEmail()))
+			{
+				new AlertWindow(AlertType.ERROR, "Email already registered! Please input a different email");
+				return false;
+			}
+		}
+		
+		if(u.getUserName().length() < 5 || u.getUserName().length() > 25)
+		{
+			new AlertWindow(AlertType.ERROR, "Name must be 5 - 25 characters!");
+			return false;
+		}else if(!u.getUserEmail().endsWith(".com"))
+		{
+			new AlertWindow(AlertType.ERROR, "Please input a valid email");
+			return false;
+		}else if(u.getUserAge() < 12 || u.getUserAge() > 99)
+		{
+			new AlertWindow(AlertType.ERROR, "Age must be 12 - 99");
+			return false;
+		}else if(u.getUserPassword().equals(u.getUserName()))
+		{
+			new AlertWindow(AlertType.ERROR, "Password cannot be same as username");
+			return false;
+		}else if(u.getUserPassword().length() < 5 || u.getUserPassword().length()> 20) {
+			new AlertWindow(AlertType.ERROR, "Password lenght must be 5 - 20 characters");
+			return false;
+		}
+		else if(u.getUserGender() == null)
+		{
+			new AlertWindow(AlertType.ERROR, "Please input the gender");
+			return false;
+		}
 		return true;
 	}
+	
+
 
 	public void refreshPage() {
 		addTable();
@@ -250,10 +350,11 @@ public class ManageUserPage {
 		userIdTF.setText("");
 		userEmailTF.setText("");
 		userNameTF.setText("");
-		userPasswordTF.setText("");
-		userGenderTF.setText("");
+		userPasswordPF.setText("");
+		maleRb.setSelected(false);
+		femaleRb.setSelected(false);
 		userAgeTF.setText("");
-		userRoleTF.setText("");
+		roleCb.setValue("");
 	}
 
 	public void setTable() {
