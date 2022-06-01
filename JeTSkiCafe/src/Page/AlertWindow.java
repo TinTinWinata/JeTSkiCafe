@@ -2,6 +2,9 @@ package Page;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class AlertWindow {
 	
@@ -11,6 +14,8 @@ public class AlertWindow {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(content);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
 		alert.showAndWait();
 	}
 	
@@ -20,6 +25,10 @@ public class AlertWindow {
 		alert.setTitle("JeTSki Cafe");
 		alert.setHeaderText(null);
 		alert.setContentText(content);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
 		alert.showAndWait();
 	}
+	
+
 }

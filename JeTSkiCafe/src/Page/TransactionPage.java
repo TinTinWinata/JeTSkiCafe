@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -202,8 +203,13 @@ public class TransactionPage {
 			
 			if(selectedT == null)
 			{
+				new AlertWindow(AlertType.ERROR, "Please select at least 1 transaction!");
 				return;
 			}
+			
+			Connect c = Connect.getConnection();
+			String query = String.format("DELETE FROM transactionDetail WHERE transactionId = %s", selectedT.getTransactionId());
+			c.executeUpdate(query);
 			
 			selectedT.remove();
 			addTableData();

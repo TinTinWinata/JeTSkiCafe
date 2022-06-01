@@ -46,8 +46,10 @@ public class LoginPage {
 		Label passwordLbl = new Label("Password");
 
 		TextField emailTF = new TextField();
-
 		PasswordField passwordPF = new PasswordField();
+		
+		emailTF.setPromptText("Input Email");
+		passwordPF.setPromptText("Input Password");
 
 		Button loginBtn = new Button("Login");
 		Button registerBtn = new Button("Register");

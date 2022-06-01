@@ -14,6 +14,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -66,7 +67,12 @@ public class RegisterPage {
 
 		PasswordField passwordPF = new PasswordField();
 		PasswordField confirmPasswordPF = new PasswordField();
-
+		
+		emailTF.setPromptText("Input Email");
+		nameTF.setPromptText("Input Email");
+		passwordPF.setPromptText("Input Password");
+		confirmPasswordPF.setPromptText("Input confirm password");
+		
 		Spinner ageSpinner = new Spinner(12, 99, 12);
 
 		Button registerBtn = new Button("Register");
@@ -147,6 +153,7 @@ public class RegisterPage {
 			if (error == null) {
 				User user = new User(generateId(), inpEmail, inpName, inpPassword, gender, inpAge, "user");
 				user.save();
+				new AlertWindow(AlertType.INFORMATION, "Register succesful	ly!");
 				LoginPage login = LoginPage.getInstance();
 				login.loginPage();
 			} else {

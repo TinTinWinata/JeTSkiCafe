@@ -170,13 +170,12 @@ public class ManageMenuPage {
 			}
 			String menuName = menuNameTF.getText();
 			String menuType = menuTypeCB.getValue();
-			int menuPrice = Integer.parseInt(menuPriceTF.getText());
-			int menuStock = Integer.parseInt(menuStockTF.getText());
+			String menuPrice = menuPriceTF.getText();
+			String menuStock = menuStockTF.getText();
 			
-			Menu tempMenu = new Menu(99, menuName, menuType, menuPrice, menuStock);
-			if(dataValidation(tempMenu))
+			if(dataValidation(menuName, menuType, menuPrice, menuStock))
 			{
-				selectedMenu.update(menuName, menuType, menuPrice, menuStock);
+				selectedMenu.update(menuName, menuType, Integer.parseInt(menuPrice), Integer.parseInt(menuStock));
 				refreshPage();
 			}
 		});
@@ -202,13 +201,16 @@ public class ManageMenuPage {
 			int menuId = Integer.parseInt(menuIdTF.getText());
 			String menuName = menuNameTF.getText();
 			String menuType = menuTypeCB.getValue();
-			int menuPrice = Integer.parseInt(menuPriceTF.getText());
-			int menuStock = Integer.parseInt(menuStockTF.getText());
+			String menuPrice = menuPriceTF.getText();
+			String menuStock = menuStockTF.getText(); 
+
 			
-			Menu m = new Menu(menuId, menuName, menuType, menuPrice, menuStock);
-			if(dataValidation(m))
+			if(dataValidation(menuName, menuType, menuPrice, menuStock))
 			{
-				m.save();				
+				Menu m = new Menu(menuId, menuName, menuType, 
+						Integer.parseInt(menuPrice), Integer.parseInt(menuStock));
+				m.save();			
+				new AlertWindow(AlertType.INFORMATION, "Menu succesfully added!");
 				refreshPage();
 			}
 			
@@ -219,33 +221,34 @@ public class ManageMenuPage {
 		});	
 	}
 	
-	public boolean dataValidation(Menu m)
+	public boolean dataValidation(String menuName, String menuType,
+			String menuPrice, String menuStock)
 	{
-		if(m.getMenuName().isEmpty() || m.getMenuPrice() == null || m.getMenuStock() == null
-				|| m.getMenuType().isEmpty() || m.getMenuId() == null){
+		if(menuName.isEmpty() || menuPrice.isEmpty() || menuStock.isEmpty()
+				|| menuType.isEmpty()){
 			new AlertWindow(AlertType.ERROR, "There's can't be a empty field!");
 			return false;
-		}else if(m.getMenuName().length() < 5 | m.getMenuName().length() > 25)
+		}else if(menuName.length() < 5 | menuName.length() > 25)
 		{
 			new AlertWindow(AlertType.ERROR, "Name length must be 5 - 20 (inclusively)");
 			return false;
-		}else if(!util.isDigit(m.getMenuPrice() + ""))
+		}else if(!util.isDigit(menuPrice))
 		{
 			new AlertWindow(AlertType.ERROR, "Price must be numeric!");
 			return false;
-		}else if(m.getMenuPrice() < 1)
+		}else if(Integer.parseInt(menuPrice) < 1)
 		{
 			new AlertWindow(AlertType.ERROR, "Price must be more than 0");
 			return false;
-		}else if(m.getMenuType().isEmpty())
+		}else if(menuType.isEmpty())
 		{
 			new AlertWindow(AlertType.ERROR, "Please select the menu type!");
 			return false;
-		}else if(!util.isDigit(m.getMenuStock() + ""))
+		}else if(!util.isDigit(menuStock))
 		{
 			new AlertWindow(AlertType.ERROR, "Stock must be numeric!");
 			return false;
-		}else if(m.getMenuStock() < 1)
+		}else if(Integer.parseInt(menuStock) < 1)
 		{
 			new AlertWindow(AlertType.ERROR, "Stock must be more than 0");
 			return false;
