@@ -15,7 +15,7 @@ public class AlertWindow {
 		alert.setHeaderText(null);
 		alert.setContentText(content);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
+		stage.getIcons().add(new Image("file:logo.png"));
 		alert.showAndWait();
 	}
 	
@@ -26,7 +26,7 @@ public class AlertWindow {
 		alert.setHeaderText(null);
 		alert.setContentText(content);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		stage.getIcons().add(new Image(this.getClass().getResource("logo.png").toString()));
+		stage.getIcons().add(new Image("file:logo.png"));
 		alert.showAndWait();
 	}
 	

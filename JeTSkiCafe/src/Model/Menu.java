@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 
 import Database.Connect;
@@ -53,6 +54,33 @@ public class Menu {
 	}
 	public void setMenuStock(Integer menuStock) {
 		this.menuStock = menuStock;
+	}
+	
+	public static void loseStock(int menuId, int loseCount)
+	{
+		Connect c = Connect.getConnection();
+		String firstQ = String.format("SELECT * from menu WHERE menuId = %s", menuId); 
+		
+		int menuStock = -1;
+		
+		ResultSet rs = c.executeQuery(firstQ);
+		try {
+			while(rs.next())
+			{
+				menuStock = rs.getInt("menuStock");
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to get menu stock");
+		}
+		
+		menuStock -= loseCount;
+		
+		if(menuStock != -1)
+		{
+			String secondQ = String.format("UPDATE menu SET menuStock = %d WHERE menuId = %d", menuStock, menuId);
+			c.executeUpdate(secondQ);
+		}
+		System.out.println("UPDATED " + menuId + " TO " + menuStock);
 	}
 	
 	public void update(String menuName, String menuType, int menuPrice, int menuStock)

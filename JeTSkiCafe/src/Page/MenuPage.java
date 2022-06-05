@@ -7,6 +7,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 public class MenuPage {
@@ -145,6 +147,7 @@ public class MenuPage {
 		userInit();
 		userComponent();
 		setEvent();
+		setWallpaper();
 		MyScene.changeScene(mainPane, "JeTSki Cafe",Utillities.WIDTH, Utillities.HEIGHT);
 	}
 	
@@ -154,8 +157,10 @@ public class MenuPage {
 		adminInit();
 		adminComponent();
 		adminEvent();
+		setWallpaper();
 		MyScene.changeScene(mainPane, "JetSki Cafe", Utillities.WIDTH, Utillities.HEIGHT);
 	}
+	
 	
 	public void menuPage()
 	{
@@ -168,7 +173,19 @@ public class MenuPage {
 		{
 			makeAdminPage();
 		}
-		
+	}
+	
+	public void setWallpaper()
+	{
+		Image wallpaper = new Image("file:cafe.jpg");
+		ImageView imageView = new ImageView(wallpaper);
+		imageView.setOpacity(0.7);
+//	      imageView.setX(10);
+//	      imageView.setY(10);
+//	      imageView.setFitWidth(575);
+//	      imageView.setPreserveRatio(true);
+	      
+		mainPane.setCenter(imageView);
 	}
 	
 }

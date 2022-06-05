@@ -92,6 +92,7 @@ public class OrderPage {
 	}
 
 	public void addTableData() {
+		table.getItems().clear();
 		Connect c = Connect.getConnection();
 		String query = "SELECT * FROM menu";
 		ResultSet rs = c.executeQuery(query);
@@ -159,6 +160,13 @@ public class OrderPage {
 
 		}
 	}
+	
+	
+	private void refreshPage()
+	{
+		addTableData();
+		
+	}
 
 	private boolean isCartExists(Menu m) {
 		Connect con = Connect.getConnection();
@@ -216,12 +224,15 @@ public class OrderPage {
 			t.save();
 
 			for (Cart cart : cartList) {
+				Menu.loseStock(cart.getMenuId(), cart.getQuantity());
+				
 				TransactionDetail td = new TransactionDetail(t.getTransactionId(), cart.getMenuId(), cart.getQuantity());
 				td.save();
 				cart.remove();
 			}
 			
 			cartTable.getItems().clear();
+			refreshPage();
 		});
 	}
 

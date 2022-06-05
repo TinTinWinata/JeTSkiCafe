@@ -210,6 +210,7 @@ public class ManageUserPage {
 			disableInsertButton();
 			User selectedUser = table.getSelectionModel().getSelectedItem();
 			if (selectedUser == null) {
+				new AlertWindow(AlertType.ERROR, "Please select one user!");
 				clearTextField();
 				return;
 			}
@@ -227,6 +228,7 @@ public class ManageUserPage {
 			User tempUser = new User(userId, userEmail, userName, userPassword, userGender, userAge, userRole);
 			if (dataValidation(tempUser, "update")) {
 				selectedUser.update(userEmail, userName, userPassword, userGender, userAge, userRole);
+				new AlertWindow(AlertType.INFORMATION, "User succesfully updated!");
 				refreshPage();
 			}
 		});
@@ -238,6 +240,7 @@ public class ManageUserPage {
 				return;
 			}
 			selectedUser.remove();
+			new AlertWindow(AlertType.INFORMATION, "User succesfully removed!");
 			refreshPage();
 		});
 		insertNewBtn.setOnMouseClicked(x -> {
@@ -246,19 +249,29 @@ public class ManageUserPage {
 			userIdTF.setText(generateNewUserId() + "");
 		});
 		insertBtn.setOnMouseClicked(x -> {
-
+			
 //			Get Data
+			if(!extraValidation())
+			{
+				return;
+			}
+			
 			int userId = Integer.parseInt(userIdTF.getText());
 			String userEmail = userEmailTF.getText();
 			String userName = userNameTF.getText();
 			String userPassword = userPasswordPF.getText();
 			String userGender = getGenderFromRb();
+			
 			int userAge = Integer.parseInt(userAgeTF.getText());
+			
+			
 			String userRole = roleCb.getValue();
 
 			User u = new User(userId, userEmail, userName, userPassword, userGender, userAge, userRole);
 			if (dataValidation(u, "insert")) {
 				u.save();
+				new AlertWindow(AlertType.INFORMATION, "User succesfully saved!");
+				disableInsertButton();
 				refreshPage();
 			}
 
@@ -267,6 +280,28 @@ public class ManageUserPage {
 			disableInsertButton();
 			clearTextField();
 		});
+	}
+	
+	public boolean extraValidation()
+	{
+		String userAge = userAgeTF.getText();
+		if(userAge.isEmpty())
+		{
+			new AlertWindow(AlertType.ERROR, "There's can't be a empty field!");
+			return false;
+		}
+		
+		int userAgeLen = userAge.length();
+		for(int i=0;i<userAgeLen;i++)
+		{
+			if(Character.isAlphabetic(userAge.charAt(i)))
+			{
+				new AlertWindow(AlertType.ERROR, "Please input a valid age!");
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public String getGenderFromRb()
@@ -318,12 +353,7 @@ public class ManageUserPage {
 			new AlertWindow(AlertType.ERROR, "Password cannot be same as username");
 			return false;
 		}else if(u.getUserPassword().length() < 5 || u.getUserPassword().length()> 20) {
-			new AlertWindow(AlertType.ERROR, "Password lenght must be 5 - 20 characters");
-			return false;
-		}
-		else if(u.getUserGender() == null)
-		{
-			new AlertWindow(AlertType.ERROR, "Please input the gender");
+			new AlertWindow(AlertType.ERROR, "Password length must be 5 - 20 characters");
 			return false;
 		}
 		return true;

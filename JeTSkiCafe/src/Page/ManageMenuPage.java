@@ -165,6 +165,7 @@ public class ManageMenuPage {
 			Menu selectedMenu = table.getSelectionModel().getSelectedItem();
 			if(selectedMenu == null)
 			{
+				new AlertWindow(AlertType.ERROR, "Please select one menu");
 				clearTextField();
 				return;
 			}
@@ -176,6 +177,7 @@ public class ManageMenuPage {
 			if(dataValidation(menuName, menuType, menuPrice, menuStock))
 			{
 				selectedMenu.update(menuName, menuType, Integer.parseInt(menuPrice), Integer.parseInt(menuStock));
+				new AlertWindow(AlertType.INFORMATION, "Menu succesfully updated!");
 				refreshPage();
 			}
 		});
@@ -188,6 +190,7 @@ public class ManageMenuPage {
 				return;
 			}
 			selectedMenu.remove();
+			new AlertWindow(AlertType.INFORMATION, "Menu succesfully removed!");
 			refreshPage();
 		});
 		insertNewBtn.setOnMouseClicked(x -> {

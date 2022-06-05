@@ -13,7 +13,7 @@ public class MyStage {
 	{
 		if(myStage == null)
 		{
-			myStage = new MyStage();
+			myStage = new MyStage();																					
 		}
 		return myStage;
 	}
@@ -36,7 +36,7 @@ public class MyStage {
 	
 	public void setIcon(String str)
 	{
-		Image icon = new Image(getClass().getResourceAsStream(str));
+		Image icon = new Image("file:logo.png");
 		this.stage.getIcons().add(icon);
 	}
 	
